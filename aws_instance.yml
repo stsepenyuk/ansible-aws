@@ -2,6 +2,8 @@
 - name: AWS instance creation
   hosts: localhost
   gather_facts: no
+  environment:
+    EC2_REGION: "{{ ec2_region }}"
   vars:
      account_details: "{{ lookup('aws_account_attribute', wantlist='true') }}"
   tasks:
@@ -52,5 +54,4 @@
     - name: show account details
       debug:
         var: account_details
-        region: "{{ ec2_region }}"
 ...
