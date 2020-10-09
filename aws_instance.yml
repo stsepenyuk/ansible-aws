@@ -52,4 +52,5 @@
     - name: show account details
       debug:
         var: account_details
+        region: "{{ ec2_region }}"
 ...
