@@ -49,6 +49,7 @@
           Platform: RHEL
       register: ec2
     
-    - name: debug
+    - name: show account details
+      debug:
         var: account_details
 ...
