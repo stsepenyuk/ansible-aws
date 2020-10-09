@@ -1,7 +1,5 @@
 ---
 - name: AWS instance creation
-  hosts: localhost
-  connection: local
   gather_facts: no
   tasks:
     - name: Get available VPC ID
