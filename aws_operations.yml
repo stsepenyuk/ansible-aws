@@ -15,6 +15,7 @@
         instance_tags:
           Role: "{{ roletag }}"
         state: stopped
+        region: "{{ ec2_region }}"
 
 - name: AWS instance start
   hosts: localhost
@@ -31,4 +32,5 @@
         instance_tags:
           Role: "{{ roletag }}"
         state: running
+        region: "{{ ec2_region }}"
 ...
