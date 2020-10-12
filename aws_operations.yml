@@ -1,0 +1,34 @@
+---
+- name: AWS instance stop
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  vars:
+    ec2_region: us-east-1
+    roletag: demo_server
+  tags:
+    - stop
+    - never
+  tasks:
+    - name: AWS instance stop
+      amazon.aws.ec2:
+        instance_tags:
+          Role: "{{ roletag }}"
+        state: stopped
+
+- name: AWS instance start
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  vars:
+    ec2_region: us-east-1
+    roletag: demo_server
+  tags:
+    - start
+  tasks:
+    - name: AWS instance start
+      amazon.aws.ec2:
+        instance_tags:
+          Role: "{{ roletag }}"
+        state: running
+...
