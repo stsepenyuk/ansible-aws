@@ -43,7 +43,7 @@
             volume_size: 5
             delete_on_termination: true
         instance_tags:
-          Role: demo_server
+          Role: "{{ roletag }}"
           Platform: RHEL
       register: ec2
 ...
