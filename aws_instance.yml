@@ -55,16 +55,6 @@
           Role: "{{ roletag }}"
           Platform: RHEL
       register: ec2
-      
-    - amazon.aws.ec2_vol:
-        instance: "{{ item.id }}"
-        state: list
-        region: "{{ ec2_region }}"
-      loop: "{{ ec2.instances }}"
-      register: ec2_vol
-
-    - debug:
-        var: ec2_vol
 
     - name: wait for the instances to boot
       wait_for:
