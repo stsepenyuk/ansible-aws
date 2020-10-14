@@ -6,16 +6,30 @@
   vars:
     ec2_region: us-east-1
     roletag: demo_server
+    instance_ids: []
   tags:
     - stop
     - never
   tasks:
+    - name: Gather information about running instances with a tag key Role
+      community.aws.ec2_instance_info:
+        filters:
+          "tag:Role": "{{ roletag }}"
+          instance-state-name: [ "running" ]
+      register: ec2
+
+    - name: build a list of instances to stop
+      set_fact:
+        instance_ids: "{{ instance_ids }} + [ '{{ item.instance_id }}' ]"
+      with_items: "{{ ec2.instances }}"
+
     - name: AWS instance stop
       amazon.aws.ec2:
-        instance_tags:
-          Role: "{{ roletag }}"
-        state: stopped
+        instance_ids: "{{ instance_ids }}"
         region: "{{ ec2_region }}"
+        state: stopped
+        wait: yes
+      when: instance_ids is defined
 
 - name: AWS instance start
   hosts: localhost
@@ -24,13 +38,27 @@
   vars:
     ec2_region: us-east-1
     roletag: demo_server
+    instance_ids: []
   tags:
     - start
   tasks:
+    - name: Gather information about stopped instance with a tag key Role
+      community.aws.ec2_instance_info:
+        filters:
+          "tag:Role": "{{ roletag }}"
+          instance-state-name: [ "stopped" ]
+      register: ec2
+
+    - name: build a list of instances to start
+      set_fact:
+        instance_ids: "{{ instance_ids }} + [ '{{ item.instance_id }}' ]"
+      with_items: "{{ ec2.instances }}"
+
     - name: AWS instance start
       amazon.aws.ec2:
-        instance_tags:
-          Role: "{{ roletag }}"
-        state: running
+        instance_ids: "{{ instance_ids }}"
         region: "{{ ec2_region }}"
+        state: running
+        wait: yes
+      when: instance_ids is defined
 ...
