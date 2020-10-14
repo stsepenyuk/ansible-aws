@@ -13,6 +13,7 @@
   tasks:
     - name: Gather information about running instances with a tag key Role
       community.aws.ec2_instance_info:
+        region: "{{ ec2_region }}"
         filters:
           "tag:Role": "{{ roletag }}"
           instance-state-name: [ "running" ]
@@ -44,6 +45,7 @@
   tasks:
     - name: Gather information about stopped instance with a tag key Role
       community.aws.ec2_instance_info:
+        region: "{{ ec2_region }}"
         filters:
           "tag:Role": "{{ roletag }}"
           instance-state-name: [ "stopped" ]
