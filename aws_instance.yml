@@ -36,7 +36,7 @@
         book_ami: "{{ found_amis.images | selectattr('name', 'defined') | sort(attribute='creation_date') | last }}"
       when: found_amis.images is defined
 
-    - name: Setup an instances for testing
+    - name: Setup instances for testing
       amazon.aws.ec2:
         key_name: ansibleAWS
         instance_type: t2.micro
@@ -91,7 +91,7 @@
         instance_ids: "{{ instance_ids }} + [ '{{ item.instance_id }}' ]"
       with_items: "{{ ec2.instances }}"
 
-    - name: AWS instance termination
+    - name: AWS instances termination
       amazon.aws.ec2:
         instance_ids: "{{ instance_ids }}"
         region: "{{ ec2_region }}"
