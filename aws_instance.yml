@@ -46,7 +46,7 @@
         group_id: "{{ sec_group_id }}"
         wait: yes
         assign_public_ip: yes
-        count: 1
+        count: "{{ ec2_counter }}"
         volumes:
           - device_name: /dev/xvdb
             volume_size: 5
