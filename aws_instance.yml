@@ -73,6 +73,7 @@
   tasks:
     - name: Gather information about any instance with a tag key Role
       community.aws.ec2_instance_info:
+        region: "{{ ec2_region }}"
         filters:
           "tag:Role": "{{ roletag }}"
       register: ec2
