@@ -39,7 +39,7 @@
     - name: Setup instances for testing
       amazon.aws.ec2:
         key_name: "{{ aws_key }}"
-        instance_type: t2.micro
+        instance_type: "{{ instance_type }}"
         image: "{{ book_ami.image_id }}"
         region: "{{ ec2_region }}"
         vpc_subnet_id: "{{ subnet_id }}"
