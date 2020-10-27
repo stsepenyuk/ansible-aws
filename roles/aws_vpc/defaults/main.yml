@@ -5,7 +5,7 @@ ec2_name_prefix: Test
 ec2_cidr_prefix: "172.16"
 ec2_region: us-east-2
 ec2_az: "{{ ec2_region }}a"
-ec2_wait: true
+ec2_wait: yes
 ec2_subnet_base:
   Test: 0
   Armaghast: 10
