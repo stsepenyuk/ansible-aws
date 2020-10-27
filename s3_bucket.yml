@@ -15,6 +15,43 @@
         mode: create
         permission: public-read
 
+- name: List bucket keys
+  hosts: localhost
+  gather_facts: no
+  vars:
+    ec2_region: us-east-1
+    bucket_name: mythics_demo_bucket
+  tags:
+    - list
+  tasks:
+    - name: list bucket keys
+      amazon.aws.aws_s3:
+        bucket: "{{ bucket_name }}"
+        mode: list
+
+- name: Transfer file between buckets
+  hosts: localhost
+  gather_facts: no
+  vars:
+    ec2_region: us-east-1
+    bucket_name: mythics_demo_bucket
+  tags:
+    - put
+  tasks:
+    - name: Get a file from existing bucket
+      get_url:
+        url: https://mythicsofmw.s3.us-east-2.amazonaws.com/p28186730_139424_Generic.zip
+        dest: /tmp/p28186730_139424_Generic.zip
+    - name: Simple PUT operation
+      amazon.aws.aws_s3:
+        bucket: "{{ bucket_name }}"
+        src: /tmp/p28186730_139424_Generic.zip
+        mode: put
+    - name: list bucket keys
+      amazon.aws.aws_s3:
+        bucket: "{{ bucket_name }}"
+        mode: list
+
 - name: Delete S3 bucket
   hosts: localhost
   gather_facts: no
