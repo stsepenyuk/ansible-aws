@@ -35,6 +35,7 @@
   vars:
     ec2_region: us-east-1
     bucket_name: mythics_demo_bucket
+    object_name: /my/p28186730_139424_Generic.zip
   tags:
     - put
   tasks:
@@ -45,12 +46,29 @@
     - name: Simple PUT operation
       amazon.aws.aws_s3:
         bucket: "{{ bucket_name }}"
+        object: "{{ object_name }}"
         src: /tmp/p28186730_139424_Generic.zip
         mode: put
     - name: list bucket keys
       amazon.aws.aws_s3:
         bucket: "{{ bucket_name }}"
         mode: list
+
+- name: Delete an object from a bucket
+  hosts: localhost
+  gather_facts: no
+  vars:
+    ec2_region: us-east-1
+    bucket_name: mythics_demo_bucket
+    object_name: /my/p28186730_139424_Generic.zip
+  tags:
+    - deleteobject
+  tasks:
+    - name: Delete an object from a bucket
+      amazon.aws.aws_s3:
+        bucket: "{{ bucket_name }}"
+        object: "{{ object_name }}"
+        mode: delobj
 
 - name: Delete S3 bucket
   hosts: localhost
