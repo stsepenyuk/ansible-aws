@@ -15,3 +15,4 @@ ec2_subnet_base:
   TauCetiCenter: 50
   Hyperion: 60
 ec2_security_type: ssh
+ec2_subnet: "172.16.0.0/16"
