@@ -23,6 +23,7 @@
     bucket_name: mythics_demo_bucket
   tags:
     - list
+    - never
   tasks:
     - name: list bucket keys
       amazon.aws.aws_s3:
@@ -38,6 +39,7 @@
     object_name: /my/p28186730_139424_Generic.zip
   tags:
     - put
+    - never
   tasks:
     - name: Get a file from existing bucket
       get_url:
@@ -63,6 +65,7 @@
     object_name: /my/p28186730_139424_Generic.zip
   tags:
     - deleteobject
+    - never
   tasks:
     - name: Delete an object from a bucket
       amazon.aws.aws_s3:
@@ -78,6 +81,7 @@
     bucket_name: mythics_demo_bucket
   tags:
     - delete
+    - never
   tasks:
     - name: Delete a bucket and all contents
       amazon.aws.aws_s3:
