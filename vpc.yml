@@ -2,5 +2,18 @@
   hosts: localhost
   tags:
     - create
+  vars:
+    state: present
   roles:
     - role: aws_vpc
+
+- name: Prepare host
+  hosts: localhost
+  tags:
+    - delete
+    - never
+  vars:
+    state: absent
+  roles:
+    - role: aws_vpc
+...
