@@ -1,0 +1,83 @@
+---
+- name: Create vpc {{ ec2_name_prefix }}-vpc
+  amazon.aws.ec2_vpc_net:
+    name: "{{ ec2_name_prefix }}-vpc"
+    cidr_block: "{{ ec2_cidr_prefix }}.0.0/16"
+    region: "{{ ec2_region }}"
+  register: new_vpc
+  until: new_vpc is not failed
+  retries: 5
+
+- name: Set security group rules template
+  set_fact:
+    sg_rules_ingress: "{{ lookup('template', 'vpc_rules.j2') }}"
+
+- name: Create security group {{ ec2_name_prefix }}-sg
+  amazon.aws.ec2_group:
+    name: "{{ ec2_name_prefix }}-sg"
+    description: "{{ ec2_name_prefix }}-sg"
+    vpc_id: "{{ new_vpc.vpc.id }}"
+    region: "{{ ec2_region }}"
+    rules: "{{ sg_rules_ingress.all_rules }}"
+    rules_egress:
+      - proto: all
+        cidr_ip: 0.0.0.0/0
+  when: ec2_vpc_id is undefined
+  register: new_sg
+  until: new_sg is not failed
+  retries: 5
+
+- name: Create subnet {{ ec2_name_prefix }}-subnet
+  amazon.aws.ec2_vpc_subnet:
+    region: "{{ ec2_region }}"
+    az: "{{ ec2_az }}"
+    vpc_id: "{{ new_vpc.vpc.id }}"
+    cidr: "{{ ec2_cidr_prefix }}.{{ ec2_subnet_base[ec2_name_prefix] }}.0/24"
+    wait_timeout: 600
+    map_public: yes
+    resource_tags:
+      Name: "{{ ec2_name_prefix }}-subnet"
+  register: new_subnet
+  when: ec2_vpc_id is undefined
+  until: new_subnet is not failed
+  retries: 5
+
+- name: Create internet gateway {{ ec2_name_prefix }}-igw
+  community.aws.ec2_vpc_igw:
+    region: "{{ ec2_region }}"
+    vpc_id: "{{ new_vpc.vpc.id }}"
+    tags:
+      Name: "{{ ec2_name_prefix }}-igw"
+      Demonstration: "{{ ec2_name_prefix }}"
+  register: new_igw
+  until: new_igw is not failed
+  retries: 15
+  when: ec2_vpc_id is undefined
+
+- name: Create route table {{ ec2_name_prefix }}-rtb
+  community.aws.ec2_vpc_route_table:
+    region: "{{ ec2_region }}"
+    vpc_id: "{{ new_vpc.vpc.id }}"
+    subnets:
+      - "{{ new_subnet.subnet.id }}"
+    routes:
+      - dest: 0.0.0.0/0
+        gateway_id: "{{ new_igw.gateway_id }}"
+    tags:
+      Name: "{{ ec2_name_prefix }}-rtb"
+      Demonstration: "{{ ec2_name_prefix }}"
+  register: new_rtb
+  until: new_rtb is not failed
+  retries: 5
+  when: ec2_vpc_id is undefined
+
+- name: Show VPC components created
+  debug:
+    msg:
+      - "ec2_name_prefix: {{ ec2_name_prefix }}"
+      - "ec2 vpc id: {{ new_vpc.vpc.id }}"
+      - "ec2 sg id: {{ new_sg.group_id }}"
+      - "ec2 vpc subnet id: {{ new_subnet.subnet.id }}"
+      - "ec2 igw id: {{ new_igw.gateway_id }}"
+      - "ec2 rtb id: {{ new_rtb.route_table.route_table_id }}"
+...
