@@ -1,5 +1,6 @@
 - name: Prepare host
   hosts: localhost
-  tags: create VPC
+  tags:
+    - create
   roles:
     - role: aws_vpc
