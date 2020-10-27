@@ -1,0 +1,15 @@
+---
+# defaults file for aws_vpc
+ec2_name_prefix: Test
+ec2_cidr_prefix: "172.16"
+ec2_region: us-east-2
+ec2_az: "{{ ec2_region }}a"
+ec2_subnet_base:
+  Test: 0
+  Armaghast: 10
+  Lusus: 20
+  GodsGrove:  30
+  MauiCovenant: 40
+  TauCetiCenter: 50
+  Hyperion: 60
+ec2_security_type: ssh
