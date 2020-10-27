@@ -1,0 +1,31 @@
+  
+---
+- name: Create S3 bucket
+  hosts: localhost
+  gather_facts: no
+  vars:
+    ec2_region: us-east-1
+    bucket_name: mythics_demo_bucket
+  tags:
+    - create
+  tasks:
+    - name: create bucket
+      amazon.aws.aws_s3:
+        bucket: "{{ bucket_name }}"
+        mode: create
+        permission: public-read
+
+- name: Delete S3 bucket
+  hosts: localhost
+  gather_facts: no
+  vars:
+    ec2_region: us-east-1
+    bucket_name: mythics_demo_bucket
+  tags:
+    - delete
+  tasks:
+    - name: Delete a bucket and all contents
+      amazon.aws.aws_s3:
+        bucket: "{{ bucket_name }}"
+        mode: delete
+...
