@@ -1,4 +1,4 @@
-- name: Prepare host
+- name: Prepare VPC
   hosts: localhost
   tags:
     - create
@@ -7,7 +7,7 @@
   roles:
     - role: aws_vpc
 
-- name: Prepare host
+- name: Destroy VPC
   hosts: localhost
   tags:
     - delete
