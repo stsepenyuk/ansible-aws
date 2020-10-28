@@ -54,8 +54,8 @@
         instance_type: "{{ instance_type }}"
         image: "{{ book_ami.image_id }}"
         region: "{{ ec2_region }}"
-        vpc_subnet_id: "{{ subnet_info.subnets[0].id }}"
-        group_id: "{{ sg_net_facts.security_groups[0].group_id }}"
+        vpc_subnet_id: "{{ subnet_info.subnets[0].id|default(subnet_id) }}"
+        group_id: "{{ sg_net_facts.security_groups[0].group_id|default(sec_group_id) }}"
         wait: yes
         wait_timeout: 500
         assign_public_ip: yes
