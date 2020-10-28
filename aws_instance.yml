@@ -90,9 +90,6 @@
   gather_facts: no
   vars:
     ec2_region: us-east-1
-    ami_name: RHEL-7.6_HVM_GA-20181017-x86_64-0-Hourly2-GP2
-    sec_group_id: sg-0ef65f7a33685f059
-    subnet_id: subnet-d69233fb
     roletag: demo_server
     instance_ids: []
   tags:
