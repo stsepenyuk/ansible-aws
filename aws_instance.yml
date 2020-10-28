@@ -20,14 +20,22 @@
           "tag:Name": "{{ ec2_name_prefix }}-vpc"
         region: "{{ ec2_region }}"
       register: vpc_net_facts
-
-    - name: Get the subnet IDs for vpc
+    
+    - name: Get the SG ID for {{ ec2_name_prefix }}-sg
+      amazon.aws.ec2_group_info:
+        filters:
+          vpc-id: "{{ vpc_net_facts.vpcs[0].id }}"
+          group-name: "{{ ec2_name_prefix }}-sg"
+        region: "{{ ec2_region }}"
+      register: sg_net_facts
+    
+    - name: Get the subnet IDs for {{ ec2_name_prefix }}-vpc
       amazon.aws.ec2_vpc_subnet_info:
         region: "{{ ec2_region }}"
         filters:
           vpc-id: "{{ vpc_net_facts.vpcs[0].id }}"
       register: subnet_info
-
+    
     - name: "Find current, region-specific AMI."
       amazon.aws.ec2_ami_info:
         region: "{{ ec2_region }}"
@@ -46,20 +54,36 @@
         instance_type: "{{ instance_type }}"
         image: "{{ book_ami.image_id }}"
         region: "{{ ec2_region }}"
-        vpc_subnet_id: "{{ subnet_id }}"
-        group_id: "{{ sec_group_id }}"
+        vpc_subnet_id: "{{ subnet_info.subnets[0].id }}|default({{ subnet_id }})"
+        group_id: "{{ sg_net_facts.security_groups[0].group_id }}|default({{ sec_group_id }})"
         wait: yes
+        wait_timeout: 500
         assign_public_ip: yes
         count: "{{ ec2_counter }}"
         volumes:
           - device_name: /dev/xvdb
             volume_size: 5
             delete_on_termination: true
+        count_tag:
+          Name: "{{ ec2_name_prefix }} RHEL server"
         instance_tags:
           Role: "{{ roletag }}"
           Platform: RHEL
+          Name: "{{ ec2_name_prefix }} RHEL server"
+          Inventory: "{{ ec2_name_prefix }}"
+          Stage: "instantiated"
       register: ec2
-
+    
+    - debug:
+        msg: "{{ ec2.tagged_instances }}"
+    
+    - name: "Wait for connection on all hosts."
+      wait_for:
+        host: "{{ item.private_ip }}"
+        port: 22
+        timeout: 300
+      loop: "{{ ec2.tagged_instances }}"
+  
 - name: AWS instances termination
   hosts: localhost
   connection: local
