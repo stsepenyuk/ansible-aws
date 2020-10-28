@@ -4,16 +4,20 @@
   gather_facts: no
   vars:
     ec2_region: us-east-1
+    ec2_name_prefix: Test
     ami_name: RHEL-7.6_HVM_GA-20181017-x86_64-0-Hourly2-GP2
     sec_group_id: sg-0ef65f7a33685f059
     subnet_id: subnet-d69233fb
+    instance_type: t2.micro
     roletag: demo_server
     ec2_counter: 2
   tags:
     - create
   tasks:
-    - name: Get available VPC ID
+    - name: Get available VPC ID for {{ ec2_name_prefix }}-vpc
       amazon.aws.ec2_vpc_net_info:
+        filters:
+          "tag:Name": "{{ ec2_name_prefix }}-vpc"
         region: "{{ ec2_region }}"
       register: vpc_net_facts
 
