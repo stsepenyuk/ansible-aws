@@ -1,3 +1,4 @@
+---
 - name: Prepare VPC
   hosts: localhost
   tags:
