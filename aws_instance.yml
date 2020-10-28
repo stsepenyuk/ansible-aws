@@ -28,6 +28,7 @@
           group-name: "{{ ec2_name_prefix }}-sg"
         region: "{{ ec2_region }}"
       register: sg_net_facts
+      ignore_errors: yes
     
     - name: Get the subnet IDs for {{ ec2_name_prefix }}-vpc
       amazon.aws.ec2_vpc_subnet_info:
@@ -35,6 +36,7 @@
         filters:
           vpc-id: "{{ vpc_net_facts.vpcs[0].id }}"
       register: subnet_info
+      ignore_errors: yes
     
     - name: "Find current, region-specific AMI."
       amazon.aws.ec2_ami_info:
