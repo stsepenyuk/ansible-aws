@@ -1,7 +1,7 @@
 ---
 # defaults file for aws_vpc
 state: present
-ec2_name_prefix: Test
+ec2_name_prefix: Hyperion
 ec2_cidr_prefix: "172.16"
 ec2_region: us-east-2
 ec2_az: "{{ ec2_region }}a"
