@@ -7,12 +7,15 @@ ec2_region: us-east-2
 ec2_az: "{{ ec2_region }}a"
 ec2_wait: yes
 ec2_subnet_base:
-  Test: 0
+  Pacem: 0
   Armaghast: 10
   Lusus: 20
   GodsGrove:  30
   MauiCovenant: 40
   TauCetiCenter: 50
   Hyperion: 60
+  ReneissanceVector: 70
+  SolDraconi: 80
+  Hebron: 90
 ec2_security_type: ssh
 ...
