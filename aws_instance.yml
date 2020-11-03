@@ -6,7 +6,6 @@
     ec2_region: us-east-1
     ec2_name_prefix: Hyperion
     ami_name: RHEL-7.6_HVM_GA-20181017-x86_64-0-Hourly2-GP2
-    vpc_id: vpc-852620ec
     sec_group_id: sg-0706617a47b119ccb
     subnet_id: subnet-c8f8efa1
     instance_type: t2.micro
@@ -96,6 +95,7 @@
     ec2_region: us-east-1
     roletag: demo_server
     instance_ids: []
+    vpc_id: vpc-852620ec
   tags:
     - terminate
     - never
