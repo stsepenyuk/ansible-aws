@@ -6,8 +6,8 @@
     ec2_region: us-east-1
     ec2_name_prefix: Hyperion
     ami_name: RHEL-7.6_HVM_GA-20181017-x86_64-0-Hourly2-GP2
-    sec_group_id: sg-0ef65f7a33685f059
-    subnet_id: subnet-d69233fb
+    sec_group_id: sg-0706617a47b119ccb
+    subnet_id: subnet-c8f8efa1
     instance_type: t2.micro
     roletag: demo_server
     ec2_counter: 2
