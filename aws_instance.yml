@@ -99,11 +99,23 @@
     - terminate
     - never
   tasks:
+    - name: Get the VPC ID for {{ ec2_name_prefix }}-vpc
+      amazon.aws.ec2_vpc_net_info:
+        filters:
+          "tag:Name": "{{ ec2_name_prefix }}-vpc"
+        region: "{{ ec2_region }}"
+      register: vpc_net_facts
+    
+    - name: Set ec2_vpc_id value
+      set_fact:
+        ec2_vpc_id: "{{ vpc_net_facts.vpcs[0].id|default('WORKSHOP_UNDEF') }}"
+    
     - name: Gather information about any instance with a tag key Role
       community.aws.ec2_instance_info:
         region: "{{ ec2_region }}"
         filters:
           "tag:Role": "{{ roletag }}"
+          "vpc-id": "{{ ec2_vpc_id }}"
       register: ec2
 
     - name: build a list of instances to terminate
