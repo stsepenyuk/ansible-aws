@@ -6,6 +6,7 @@
     ec2_region: us-east-1
     ec2_name_prefix: Hyperion
     ami_name: RHEL-7.6_HVM_GA-20181017-x86_64-0-Hourly2-GP2
+    vpc_id: vpc-852620ec
     sec_group_id: sg-0706617a47b119ccb
     subnet_id: subnet-c8f8efa1
     instance_type: t2.micro
@@ -108,7 +109,7 @@
     
     - name: Set ec2_vpc_id value
       set_fact:
-        ec2_vpc_id: "{{ vpc_net_facts.vpcs[0].id|default('WORKSHOP_UNDEF') }}"
+        ec2_vpc_id: "{{ vpc_net_facts.vpcs[0].id|default(vpc_id) }}"
     
     - name: Gather information about any instance with a tag key Role
       community.aws.ec2_instance_info:
