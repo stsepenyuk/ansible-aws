@@ -37,6 +37,7 @@
           vpc-id: "{{ vpc_net_facts.vpcs[0].id }}"
       register: subnet_info
       ignore_errors: yes
+      when: vpc_net_facts is defined
     
     - name: "Find current, region-specific AMI."
       amazon.aws.ec2_ami_info:
