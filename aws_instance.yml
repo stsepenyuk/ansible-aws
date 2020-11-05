@@ -11,7 +11,7 @@
     instance_type: t2.micro
     roletag: demo_server
     ec2_counter: 2
-    root_volume_size: 10
+    extra_volume_size: 5
   tags:
     - create
   tasks:
@@ -65,8 +65,8 @@
         assign_public_ip: yes
         count: "{{ ec2_counter }}"
         volumes:
-          - device_name: /dev/xvda
-            volume_size: "{{ root_volume_size }}"
+          - device_name: /dev/xvdb
+            volume_size: "{{ extra_volume_size }}"
             delete_on_termination: true
         count_tag:
           Name: "{{ ec2_name_prefix }} RHEL server"
