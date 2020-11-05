@@ -64,8 +64,8 @@
         assign_public_ip: yes
         count: "{{ ec2_counter }}"
         volumes:
-          - device_name: /dev/xvdb
-            volume_size: 5
+          - device_name: /dev/xvda
+            volume_size: 20
             delete_on_termination: true
         count_tag:
           Name: "{{ ec2_name_prefix }} RHEL server"
