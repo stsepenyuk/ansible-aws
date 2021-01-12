@@ -1,6 +1,6 @@
 ---
 - name: AWS instance creation
-  hosts: localhost
+  hosts: control
   gather_facts: no
   vars:
     ec2_region: us-east-1
@@ -89,7 +89,7 @@
       loop: "{{ ec2.tagged_instances }}"
   
 - name: AWS instances termination
-  hosts: localhost
+  hosts: control
   connection: local
   gather_facts: no
   vars:
