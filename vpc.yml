@@ -8,6 +8,10 @@
   roles:
     - role: aws_vpc
 
+- name: test
+  debug:
+    msg: test
+    
 - name: Destroy VPC
   hosts: localhost
   tags:
