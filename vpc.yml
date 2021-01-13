@@ -1,6 +1,6 @@
 ---
 - name: Prepare VPC
-  hosts: control
+  hosts: localhost
   tags:
     - create
   vars:
@@ -9,7 +9,7 @@
     - role: aws_vpc
 
 - name: Destroy VPC
-  hosts: control
+  hosts: localhost
   tags:
     - delete
     - never
