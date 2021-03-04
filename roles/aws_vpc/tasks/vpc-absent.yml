@@ -28,7 +28,7 @@
   when: all_vpc_instances.instances
 
 - name: Delete security group {{ ec2_name_prefix }}-sg
-  amazon.aws.ec2_group:
+  ec2_group:
     name: "{{ ec2_name_prefix }}-sg"
     region: "{{ ec2_region }}"
     vpc_id: "{{ ec2_vpc_id }}"
