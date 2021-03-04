@@ -18,7 +18,7 @@
 - debug: var=sg_rules_ingress.all_rules
 
 - name: Create security group {{ ec2_name_prefix }}-sg
-  amazon.aws.ec2_group:
+  ec2_group:
     name: "{{ ec2_name_prefix }}-sg"
     description: "{{ ec2_name_prefix }}-sg"
     vpc_id: "{{ new_vpc.vpc.id }}"
