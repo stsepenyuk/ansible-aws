@@ -12,6 +12,11 @@
   set_fact:
     sg_rules_ingress: "{{ lookup('template', 'vpc_rules.j2') }}"
 
+- debug: var=ec2_name_prefix
+- debug: var=new_vpc.vpc.id
+- debug: var=ec2_region
+- debug: var=sg_rules_ingress.all_rules
+
 - name: Create security group {{ ec2_name_prefix }}-sg
   amazon.aws.ec2_group:
     name: "{{ ec2_name_prefix }}-sg"
