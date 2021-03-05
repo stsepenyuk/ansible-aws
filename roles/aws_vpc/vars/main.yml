@@ -38,6 +38,14 @@ rules:
         from_port: 22
         cidr_ip: 0.0.0.0/0
       - proto: tcp
+        to_port: 80
+        from_port: 80
+        cidr_ip: 0.0.0.0/0
+      - proto: tcp
+        to_port: 443
+        from_port: 443
+        cidr_ip: 0.0.0.0/0
+      - proto: tcp
         to_port: 7002
         from_port: 7001
         cidr_ip: 0.0.0.0/0
