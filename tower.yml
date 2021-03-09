@@ -1,0 +1,71 @@
+---
+- name: install epel package
+  hosts: tower
+  become: yes
+  gather_facts: no
+  tags:
+    - install-ansible
+  tasks:
+    - name: install fedoraproject epel package
+      shell:
+        cmd: |
+          rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+      ignore_errors: yes
+
+    - name: install ansible
+      yum:
+        name: ansible
+        state: latest
+
+- name: download and install tower
+  hosts: tower
+  gather_facts: no
+  tags:
+    - install-tower
+  vars:
+    s3_url: "https://mythicsofmw.s3.us-east-2.amazonaws.com"
+    tower_binary: ansible-tower-setup-latest.tar.gz
+    tmp_dir: "/tmp"
+    tower_version: "3.8.1-1"
+    tower_pwd: "welcome1"
+  tasks:
+    - name: Touch tmp dir
+      file:
+        path: "{{ tmp_dir }}"
+
+    - name: download archive
+      get_url:
+        url: "{{ s3_url }}/{{ tower_binary }}"
+        dest: "{{ tmp_dir }}/{{ tower_binary }}"
+
+    - name: extract binary archive
+      unarchive:
+        src: "{{ tmp_dir }}/{{ tower_binary }}"
+        dest: "{{ tmp_dir }}/"
+        remote_src: yes
+
+    - name: add privilege escalation
+      lineinfile:
+        path: "{{ tmp_dir }}/ansible-tower-setup-{{ tower_version }}/inventory"
+        insertafter: "\\[all:vars\\]"
+        line: "ansible_become=true"
+
+    - name: add admin_password
+      replace:
+        path: "{{ tmp_dir }}/ansible-tower-setup-{{ tower_version }}/inventory"
+        regexp: "admin_password=''"
+        replace: "admin_password='{{ tower_pwd }}'"
+
+    - name: add pg_password
+      replace:
+        path: "{{ tmp_dir }}/ansible-tower-setup-{{ tower_version }}/inventory"
+        regexp: "pg_password=''"
+        replace: "pg_password='{{ tower_pwd }}'"
+
+    - name: Install Ansible Tower
+      shell:
+        cmd: |
+          cd {{ tmp_dir }}/ansible-tower-setup-{{ tower_version }}
+          ./setup.sh
+      ignore_errors: yes
+...
