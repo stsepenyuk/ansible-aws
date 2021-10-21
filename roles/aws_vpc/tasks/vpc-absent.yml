@@ -11,7 +11,7 @@
     ec2_vpc_id: "{{ vpc_net_facts.vpcs[0].id|default('WORKSHOP_UNDEF') }}"
 
 - name: Get EC2 instance info for {{ ec2_name_prefix }}-vpc
-  community.aws.ec2_instance_info:
+  ec2_instance_info:
     region: "{{ ec2_region }}"
     filters:
       "vpc-id": "{{ ec2_vpc_id }}"
