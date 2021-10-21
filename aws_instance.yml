@@ -113,7 +113,7 @@
         ec2_vpc_id: "{{ vpc_net_facts.vpcs[0].id|default(vpc_id) }}"
     
     - name: Gather information about any instance with a tag key Role
-      community.aws.ec2_instance_info:
+      ec2_instance_info:
         region: "{{ ec2_region }}"
         filters:
           "tag:Role": "{{ roletag }}"
